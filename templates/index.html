@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test link shortener</title>
+</head>
+<body>
+    <form id="shortLinkForm" action="{{ server_host }}/{{ link_endpoint }}/" method="POST">
+        <input name="initial_url" type="url" placeholder="Enter URL" />
+        <input id="getShortLink" type="submit" value="Get short link">
+    </form>
+</body>
+</html>

@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256 --encoding=UTF8 --locale=en_US.UTF-8 --data-checksums
+      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=lsh
+      - POSTGRES_PASSWORD=test_pwd
+    ports:
+      - "25432:5432"
+
+  link-shortener:
+    image: link-shortener:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    environment:
+      - DEV_MODE=true
+      - DB_HOST=db
+      - DB_NAME=lsh
+      - DB_USER=postgres
+      - DB_PASSWORD=test_pwd
+    command: "bash -c 'uvicorn --host 0.0.0.0 link_shortener.app:app --limit-concurrency 100 --backlog 1000'"
+    ports:
+      - "8000:8000"
